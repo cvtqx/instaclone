@@ -1,8 +1,24 @@
 import { Box, Button, Flex, Image, Input, VStack, Text } from '@chakra-ui/react'
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [inputs, setInputs] = useState({
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    
+    const navigate = useNavigate();
+
+    const handleAuth = () => {
+        if (!inputs.email || !inputs.password ) {
+            alert("Please fill out all the fields!");
+            return
+        }
+        navigate('/');
+    };
 
   return (
     <>
@@ -12,21 +28,27 @@ const AuthForm = () => {
               <Input
                   placeholder='Email'
                   fontSize={14}
-                  type='email'
+                      type='email'
+                      value={inputs.email}
+                      onChange={(e) => setInputs({...inputs, email: e.target.value})}
               />
                <Input
                   placeholder='Password'
                   fontSize={14}
-                  type='password'
+                      type='password'
+                      value={inputs.password}
+                      onChange={(e) => setInputs({...inputs, password: e.target.value})}
               />
               {!isLoggedIn ? (
                 <Input
                   placeholder='Confirm Password'
                   fontSize={14}
-                  type='password'
+                          type='password'
+                          value={inputs.confirmPassword}
+                          onChange={(e) => setInputs({...inputs, confirmPassword: e.target.value})}
               />
               ) : null}
-              <Button w={"full"} colorScheme='blue' size={'sm'} fontSize={14}>
+              <Button w={"full"} colorScheme='blue' size={'sm'} fontSize={14} onClick={handleAuth}>
                   {isLoggedIn ? "Log in" : "Sign up"}
               </Button>
 
@@ -48,8 +70,8 @@ const AuthForm = () => {
                   <Box mx={2} fontSize={14}>
                       {isLoggedIn ? "Don't have an account?" : "Already have an acccount?"}
                   </Box>
-                  <Box onClick={() => setIsLoggedIn(!isLoggedIn)} coloe={"blue.500"} cursor={"pointer"}>
-                      {isLoggedIn ? "Sign Up" : "Log In"
+                  <Box onClick={() => setIsLoggedIn(!isLoggedIn)} color={"blue.500"} cursor={"pointer"}>
+                      {isLoggedIn ? "Sign up" : "Log in"
                       }
                   </Box>
               </Flex>             
