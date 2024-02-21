@@ -2,7 +2,7 @@ import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@
 import { useState } from 'react'
 import { NotificationsLogo, UnlikeLogo, CommentLogo } from '../../assets/constants'
 
-const PostFooter = ({username}) => {
+const PostFooter = ({username, isProfilePage}) => {
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(1000);
 
@@ -17,43 +17,50 @@ const PostFooter = ({username}) => {
     }
 
   return (
-      <Box my={10}>
-          <Flex alignItems={'center'} gap={4} w={'full'} pt={0} mb={2} mt={4}>
-              <Box onClick={handleLike} cursor={'pointer'} fontSize={18}>
-                  {!liked ? (<NotificationsLogo />) : (<UnlikeLogo />)}
-              </Box>
-              <Box cursor={'pointer'} fotnSize={18}>
-                  <CommentLogo />
-              </Box>
-          </Flex>
-          <Text fontWeight={600} fontSize={'sm'}>
-              {likes} likes
-          </Text>
+    <Box my={10} marginTop={'auto'}>
+      <Flex alignItems={'center'} gap={4} w={'full'} pt={0} mb={2} mt={4}>
+        <Box onClick={handleLike} cursor={'pointer'} fontSize={18}>
+          {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
+        </Box>
+        <Box cursor={'pointer'} fotnSize={18}>
+          <CommentLogo />
+        </Box>
+      </Flex>
+      <Text fontWeight={600} fontSize={'sm'}>
+        {likes} likes
+      </Text>
+      {!isProfilePage && (
+        <>
           <Text fontWeight={700} fontSize={'sm'}>
-              {username} {" "}
-              <Text as='span' fontWeight={400}>Feeling good</Text>             
+            {username}{' '}
+            <Text as='span' fontWeight={400}>
+              Feeling good
+            </Text>
           </Text>
-           <Text color={'gray'} fontSize={'sm'}>
-              View all 1000 comments
+          <Text color={'gray'} fontSize={'sm'}>
+            View all 1000 comments
           </Text>
-          <Flex alignItems={'center'} gap={2} justifyContent={'space-between'} w={'full'}>
-              <InputGroup>
-                  <Input variant={'flushed'} placeholder={'Add a comment'} fontSize={14} />
-                  <InputRightElement>
-                      <Button
-                          fontSize={14}
-                          color={"blue.500"}
-                          fontWeight={600}
-                          cursor={'pointer'}
-                          _hover={{ color: 'white' }}
-                          bg={'transparent'}>
-                          Post
-                      </Button>
-                  </InputRightElement>
-              </InputGroup>
-          </Flex>
+        </>
+      )}
+      <Flex alignItems={'center'} gap={2} justifyContent={'space-between'} w={'full'}>
+        <InputGroup>
+          <Input variant={'flushed'} placeholder={'Add a comment'} fontSize={14} />
+          <InputRightElement>
+            <Button
+              fontSize={14}
+              color={'blue.500'}
+              fontWeight={600}
+              cursor={'pointer'}
+              _hover={{ color: 'white' }}
+              bg={'transparent'}
+            >
+              Post
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </Flex>
     </Box>
-  )
+  );
 }
 
 export default PostFooter
