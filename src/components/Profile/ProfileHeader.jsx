@@ -1,15 +1,19 @@
-import { Avatar, AvatarGroup, Button, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { Avatar, AvatarGroup, Button, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import useUserProfileStore from '../../store/userProfileStore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import useAuthstore from '../../store/authStore';
 import EditProfile from './EditProfile';
+import useFollowUser from '../../hooks/useFollowUser';
 
 const ProfileHeader = () => {
   const { userProfile } = useUserProfileStore();
-  const authUser = useAuthstore(state => state.user);
+  const authUser = useAuthstore((state) => state.user);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(userProfile?.uid);
+
   const visitingOwnProfileAndAuth = authUser && authUser.username === userProfile.username;
-const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProfile.username;
- const { isOpen, onOpen, onClose } = useDisclosure();
+  const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProfile.username;
+
   return (
     <Flex gap={{ base: 4, sm: 10 }} py={10} direction={{ base: 'column', sm: 'row' }}>
       <AvatarGroup
@@ -49,8 +53,10 @@ const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProf
                 color={'white'}
                 _hover={{ bg: 'blue.600' }}
                 size={{ base: 'xs', md: 'sm' }}
+                onClick={handleFollowUser}
+                isLoading={isUpdating}
               >
-                Follow
+                {isFollowing ? ' Unfollow' : 'Follow'}
               </Button>
             </Flex>
           )}
@@ -82,9 +88,9 @@ const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProf
         </Flex>
         <Text fontSize={'sm'}>{userProfile.bio}</Text>
       </VStack>
-      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} /> }
+      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} />}
     </Flex>
   );
-}
+};
 
-export default ProfileHeader
+export default ProfileHeader;
