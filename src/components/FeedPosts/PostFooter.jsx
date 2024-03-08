@@ -22,7 +22,7 @@ const PostFooter = ({username, isProfilePage}) => {
         <Box onClick={handleLike} cursor={'pointer'} fontSize={18}>
           {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
         </Box>
-        <Box cursor={'pointer'} fotnSize={18}>
+        <Box cursor={'pointer'} fontSize={18}>
           <CommentLogo />
         </Box>
       </Flex>
