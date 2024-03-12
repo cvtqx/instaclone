@@ -35,7 +35,7 @@ const SuggestedUser = ({ user, setUser}) => {
           bg={'transparent'}
           p={0}
           h={'max-content'}
-          font-weight={'medium'}
+          fontWeight={'medium'}
           color={'blue.400'}
           cursor={'pointer'}
           _hover={{ color: 'white' }}
