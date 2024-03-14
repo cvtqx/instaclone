@@ -1,5 +1,5 @@
 import {
-    Avatar,
+  Avatar,
   Button,
   Divider,
   Flex,
@@ -30,15 +30,15 @@ import usePostStore from '../../store/postStore';
 
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const userProfile = useUserProfileStore(state => state.userProfile);
-  const authUser = useAuthstore(state => state.user);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const authUser = useAuthstore((state) => state.user);
   const showToast = useShowToast();
   const [isDeleting, setIsDeleting] = useState(false);
-  const deletePost = usePostStore(state => state.deletePost);
-  const deletePostFromProfile = useUserProfileStore(state => state.deletePost)
+  const deletePost = usePostStore((state) => state.deletePost);
+  const decrementPostCount = useUserProfileStore((state) => state.deletePost);
 
   const handleDeletePost = async () => {
-    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
     if (isDeleting) return;
     try {
       //delete image from storage and post from user.posts firestore
@@ -48,13 +48,13 @@ const ProfilePost = ({ post }) => {
       await deleteDoc(doc(firestore, 'posts', post.id));
       await updateDoc(userRef, { posts: arrayRemove(post.id) });
       deletePost(post.id);
-      deletePostFromProfile(post.id);
+      decrementPostCount(post.id);
       showToast('Success', 'Post deleted successfully', 'success');
     } catch (error) {
-      showToast("Error", error.message, 'error')
+      showToast('Error', error.message, 'error');
     } finally {
-      setIsDeleting(false)
-}
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -148,21 +148,12 @@ const ProfilePost = ({ post }) => {
                 </Flex>
                 <Divider my={4} bg={'gray.500'} />
                 <VStack w='full' alignItems={'start'} maxH={'350px'} overflowY={'auto'}>
-                  <Comment
-                    createdAt='1d ago'
-                    username='Dan'
-                    profilePic='/profilePic.png'
-                    text={'Dummy images from the net'}
-                  />
-                  <Comment
-                    createdAt='15h ago'
-                    username='Ilya'
-                    profilePic='/profilePic.png'
-                    text={'Nice pic'}
-                  />
+                  {post.comments.map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                  ))}
                 </VStack>
                 <Divider my={4} bg={'gray.800'} />
-                <PostFooter isProfilePage={true} />
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>
