@@ -13,7 +13,6 @@ const useFollowUser = (userId) => {
     const { userProfile, setUserProfile } = useUserProfileStore();
     const showToast = useShowToast();
 
-  console.log('user', userProfile);
     const handleFollowUser = async () => {
         setIsUpdating(true);
 
