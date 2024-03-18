@@ -7,7 +7,7 @@ import useLikePost from '../../hooks/useLikePost';
 import { timeAgo } from '../../utils/timeAgo';
 import CommentsModal from '../Modals/CommentsModal';
 
-const PostFooter = ({ post, creatorProfile, username, isProfilePage }) => {
+const PostFooter = ({ post, creatorProfile, isProfilePage }) => {
   
   const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState('');
