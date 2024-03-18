@@ -1,18 +1,20 @@
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text, useDisclosure } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { NotificationsLogo, UnlikeLogo, CommentLogo } from '../../assets/constants';
 import usePostComment from '../../hooks/usePostComment';
 import useAuthstore from '../../store/authStore';
 import useLikePost from '../../hooks/useLikePost';
+import { timeAgo } from '../../utils/timeAgo';
+import CommentsModal from '../Modals/CommentsModal';
 
-const PostFooter = ({ post, username, isProfilePage }) => {
+const PostFooter = ({ post, creatorProfile, username, isProfilePage }) => {
   
   const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState('');
   const authUser = useAuthstore(state => state.user);
   const commentRef = useRef(null);
   const { isLiked, likes, handleLikePost } = useLikePost(post);
-
+  const {isOpen, onOpen, onClose} = useDisclosure();
   const handleSubmitComment = async () => {
     await handlePostComment(post.id, comment);
     setComment('');
@@ -33,17 +35,28 @@ const PostFooter = ({ post, username, isProfilePage }) => {
       <Text fontWeight={600} fontSize={'sm'}>
         {likes} likes
       </Text>
+
+      {isProfilePage && (
+        <Text color={'gray'} fontSize='12'>
+          Posted {timeAgo(post.createdAt)}
+        </Text>
+      )}
+
       {!isProfilePage && (
         <>
           <Text fontWeight={700} fontSize={'sm'}>
-            {username}{' '}
+            {creatorProfile?.username}{' '}
             <Text as='span' fontWeight={400}>
-              Feeling good
+              {post.caption}
             </Text>
           </Text>
-          <Text color={'gray'} fontSize={'sm'}>
-            View all 1000 comments
-          </Text>
+          {post.comments.length > 0 && (
+            <Text color={'gray'} fontSize={'sm'} onClick={onOpen}>
+              View all {post.comments.length} comments
+            </Text>
+          )}
+          {/* COMMENTS MODAL ONLY IN THE HOME PAGE */}
+          {isOpen ?  <CommentsModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
         </>
       )}
       {authUser && (
